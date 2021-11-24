@@ -1,0 +1,51 @@
+import numpy as np
+import math 
+import matplotlib.pyplot as plt
+
+## WZÓR Ogólny
+## q(t) = q0 * e^-alfa*t
+## Numer albumu = 138103
+
+
+C = 0.001
+R = 1103
+
+alfa = 1 / (C * R)
+print("Alfa = ", alfa, "\n")
+
+t = np.log(20)*alfa
+
+print("Czas t po ktorym układ nie przekracza 0.05 = ", t, "\n")
+
+#-----
+
+#f(t) = alfa * sin(omega * t) - cos * omega(omega * t) / omega^2 + alfa^2
+C = 0
+alfa = 1
+
+def funkcja(omega):
+  print("Wykres dla omega = ", omega)
+  t = np.linspace(0.1, 10, 100)
+
+  corj = C*np.exp(-alfa * t)
+  corjp = -C * alfa * np.exp(alfa * t)
+
+  x = corj + (alfa * np.sin(omega * t) - omega * np.cos(omega * t))/ (omega * omega + alfa * alfa)
+  xp = corjp + (alfa * omega * np.cos(omega * t) + omega * omega * np.sin(omega * t)) / (omega * omega + alfa * alfa)
+
+  # wymuszenie 
+  u = np.sin(omega * t)
+
+  fig, ax = plt.subplots()
+   
+  ax.plot(t, x, t, xp, t, u)
+
+  ax.grid(True)
+  plt.xscale('log') 
+  plt.show()
+
+
+funkcja(10)  
+funkcja(1)
+funkcja(0.1)
+funkcja(5)
