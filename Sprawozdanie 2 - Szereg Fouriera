@@ -1,0 +1,54 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import math 
+import scipy.integrate as integrate
+from scipy.integrate import quad
+
+
+T = 2
+w = 2 * np.pi/T
+p = 1.120
+
+def f(t):
+  return p * t**2
+
+def f2(t):
+  return p * t**2 * math.cos(w*t)
+
+def f3(t):
+  return p * t**2 * (math.cos(2*w*t))
+
+
+a0 = 1/T * integrate.quad(f, -1, 1)[0]
+a1 = 2/T * integrate.quad(f2, -1, 1)[0]
+a2 = 2/T * integrate.quad(f3, -1, 1)[0]  
+
+print("p = ", p,"a0 =", a0, "a1 = ", a1, "a2 = ", a2)
+
+def F(t):
+  return (a0 + a1*np.cos(w*t) + a2*np.cos(2*w*t))
+
+t=np.linspace(-1,1,100)
+fig, ax = plt.subplots()
+ax.plot(t, f(t), t, F(t))
+ax.grid(True)
+plt.show()
+
+
+from sympy import *
+
+a, b, c, t = symbols("a b c t", real = True)
+
+def w(t):
+  return a*t*t+b*t+c
+
+def F(t):
+  return (a0 + a1*cos(pi*t) + a2*cos(2*pi*t))
+
+A = integrate((F(t) - w(t))*t**2, (t, -1, 1))
+B = integrate((F(t) - w(t))*t, (t, -1, 1))
+C = integrate((F(t) - w(t)), (t, -1, 1))
+
+equations = [Eq(A, 0), Eq(B, 0), Eq(C, 0)]
+
+print(solve(equations))
